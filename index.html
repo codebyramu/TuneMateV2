@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TuneMate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+/* --- VARIABLES & RESET --- */
+:root {
+  --bg-app: #f4f7f9;
+  --bg-card: #ffffff;
+  --text-main: #1a1e23;
+  --text-muted: #6b7280;
+  --green-main: #7dd3b3;
+  --green-light: #e6f6f0;
+  --green-dark: #115e41;
+  --blue-main: #5d83b9;
+  --blue-light: #e8ecf4;
+  --gold-main: #d4af37;
+  --border-light: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
+body {
+  font-family: 'Inter', sans-serif; background-color: var(--bg-app);
+  color: var(--text-main); display: flex; flex-direction: column;
+  height: 100vh; overflow: hidden;
+}
+
+/* --- UTILITIES --- */
+.flex { display: flex; } .flex-col { display: flex; flex-direction: column; }
+.align-center { display: flex; align-items: center; } .justify-between { display: flex; justify-content: space-between; }
+.justify-center { display: flex; justify-content: center; } .flex-1 { flex: 1; }
+.gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
+.w-full { width: 100%; }
+.mt-2 { margin-top: 8px; } .mt-4 { margin-top: 16px; } .mb-2 { margin-bottom: 8px; } .mb-4 { margin-bottom: 16px; }
+.text-center { text-align: center; }
+.scroll-x { overflow-x: auto; scrollbar-width: none; } .scroll-x::-webkit-scrollbar { display: none; }
+
+/* --- HEADER --- */
+.app-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; background: transparent; flex-shrink: 0;
+}
+.hamburger { font-size: 26px; color: #888; cursor: pointer; line-height: 1; }
+.app-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 600; color: #111; letter-spacing: -0.5px; }
+.bell-wrap { position: relative; font-size: 24px; color: #888; cursor: pointer; }
+.bell-dot { position: absolute; top: 0px; right: 0px; width: 8px; height: 8px; background: var(--green-main); border-radius: 50%; border: 1px solid #fff; }
+
+/* --- TOP TABS --- */
+.top-tabs-wrap { padding: 0 20px 16px 20px; width: 100%; max-width: 1000px; margin: 0 auto; flex-shrink: 0; display:flex; justify-content:center; }
+.top-tabs { display: inline-flex; background: #e2e8f0; border-radius: 100px; padding: 4px; width: 100%; max-width: 500px;}
+.top-tab {
+  flex: 1; padding: 10px 0; border-radius: 100px; border: none; background: transparent;
+  color: #64748b; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; text-align:center;
+}
+.top-tab.active { background: #fff; color: #0f172a; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+/* --- PAGES --- */
+.page { display: none; flex: 1; flex-direction: column; overflow: hidden; width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+.page.active { display: flex; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --- PAGE 1: SRUTHI/METRONOME (NO SCROLL) --- */
+#page-1 { padding-bottom: 20px; }
+.p1-cards { display: flex; gap: 16px; flex-direction: column; flex-shrink: 0; }
+@media(min-width: 768px) { .p1-cards { flex-direction: row; } }
+.p1-card {
+  flex: 1; background: var(--bg-card); border-radius: 24px; padding: 24px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;
+  display: flex; flex-direction: column; align-items: center; justify-content:center;
+}
+.card-title { font-size: 16px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px; width: 100%; margin-bottom: 16px; }
+.card-icon { font-size: 18px; }
+
+/* Sruthi specific */
+.s-pitch-btn { background:transparent; border:none; display:flex; flex-direction:column; align-items:center; cursor:pointer; margin-bottom: 20px; }
+.s-pitch-num { font-size: 56px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; }
+.s-pitch-lbl { font-size: 13px; color: #94a3b8; font-weight: 600; margin-top:4px; text-transform:uppercase; letter-spacing:1px; }
+.s-vol-row { display: flex; align-items: center; gap: 12px; width: 100%; margin-bottom: 24px; max-width:260px; }
+.s-vol-row span { color: #cbd5e1; font-size: 18px; }
+.vol-slider { flex: 1; -webkit-appearance: none; height: 6px; background: #e2e8f0; border-radius: 3px; outline: none; }
+.vol-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--green-main); box-shadow: 0 0 0 4px rgba(125, 211, 179, 0.2); cursor: pointer; }
+.play-btn-huge { width: 80px; height: 80px; border-radius: 50%; border: none; color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; margin-bottom: 24px; flex-shrink:0; }
+.play-green { background: var(--green-main); box-shadow: 0 8px 24px rgba(125, 211, 179, 0.4); }
+.play-blue { background: var(--blue-main); box-shadow: 0 8px 24px rgba(93, 131, 185, 0.4); }
+.s-favs { width: 100%; display: flex; justify-content: space-between; gap:6px; }
+.s-fav-btn { flex: 1; padding: 10px 0; border-radius: 12px; border: 1px solid #f1f5f9; background: #f8fafc; color: #64748b; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.s-fav-btn.active { background: var(--green-light); color: var(--green-dark); border-color: var(--green-light); }
+
+/* Metronome specific */
+.m-bpm-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom: 16px; cursor: ns-resize; }
+.m-bpm-input { font-size: 64px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; text-align:center; border:none; background:transparent; width:120px; outline:none; font-family:inherit; padding:0; margin:0;}
+.m-bpm-lbl { font-size: 13px; color: #94a3b8; font-weight: 600; margin-top:0px; text-transform:uppercase; letter-spacing:1px; }
+.m-ts-row { display: flex; align-items: center; justify-content:center; gap: 16px; margin-bottom: 20px; }
+.m-circle-btn { width: 44px; height: 44px; border-radius: 50%; background: #f1f5f9; border: none; color: #64748b; font-size: 24px; font-weight: 500; cursor: pointer; transition: 0.2s; display:flex; align-items:center; justify-content:center; line-height:0; }
+.m-ts-disp { font-size: 18px; font-weight: 600; color: #0f172a; width: 40px; text-align:center; }
+.m-bottom-btns { display:flex; gap:12px; width:100%; }
+.m-pill-btn { flex:1; background: #f1f5f9; border: none; border-radius: 16px; padding: 14px 0; font-size: 15px; font-weight: 600; color: #475569; cursor: pointer; font-family: inherit; transition:0.2s; }
+
+/* Live Visualizer */
+.live-viz-wrap { flex: 1; display:flex; align-items:center; justify-content:center; padding: 20px 0; min-height: 80px; opacity:0; transition:opacity 0.3s; }
+.live-viz-wrap.active { opacity:1; }
+.viz-beats { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.viz-beat { width: 40px; height: 40px; border-radius: 12px; background: #e2e8f0; display:flex; align-items:center; justify-content:center; font-size: 16px; font-weight: 700; color: #94a3b8; transition: 0.1s; }
+.viz-beat.accent { background: #cbd5e1; font-size:18px; color:#475569;}
+.viz-beat.silent { opacity: 0.5; }
+.viz-beat.playing { background: var(--blue-main); color: #fff; transform: scale(1.15); box-shadow: 0 4px 12px rgba(93,131,185,0.4); }
+.viz-beat.playing.accent { background: var(--gold-main); box-shadow: 0 4px 12px rgba(212,175,55,0.4); }
+
+/* --- PAGE 2: PRACTICE (SCROLLABLE) --- */
+#page-2 { overflow-y: auto; padding-bottom: 40px; }
+.greeting-row { font-size:24px; font-family:'Playfair Display',serif; color:#0f172a; font-weight:600; margin-bottom:24px; display:flex; align-items:center; gap:8px; }
+.greeting-input { border:none; border-bottom:2px dashed #cbd5e1; background:transparent; font-family:inherit; font-size:24px; font-weight:600; color:var(--blue-main); width:140px; outline:none; }
+.greeting-input:focus { border-bottom-color: var(--blue-main); }
+
+.prac-split { display:flex; flex-direction:column; gap:20px; }
+@media(min-width: 768px) { .prac-split { flex-direction:row-reverse; } .prac-sidebar { width:320px; flex-shrink:0; } .prac-main { flex:1; min-width:0; } }
+
+.prac-card { background:#fff; border-radius:24px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.02); border:1px solid #f1f5f9; margin-bottom:20px; }
+.p-lesson-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; }
+.p-lesson-title { font-size:22px; font-weight:700; color:#0f172a; }
+.p-lesson-cat { font-size:14px; font-weight:500; color:#64748b; margin-top:4px; }
+.btn-pro { background:linear-gradient(135deg, var(--gold-main), #eab308); color:#fff; border:none; border-radius:100px; padding:10px 20px; font-weight:600; font-size:14px; cursor:pointer; font-family:inherit; box-shadow:0 4px 15px rgba(212, 175, 55, 0.3); }
+
+.p-notes-hwy { display:flex; gap:12px; overflow-x:auto; padding:24px 0; scrollbar-width:none; align-items:center; }
+.p-note { height:56px; border-radius:14px; background:#f1f5f9; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; color:#334155; transition:0.2s; flex-shrink:0; text-transform:uppercase; min-width:56px; }
+.p-note.active { background:var(--blue-main); color:#fff; border-color:var(--blue-main); transform:scale(1.1); box-shadow:0 8px 20px rgba(93,131,185,0.3); z-index:10; }
+.p-note.con-note { border-bottom: 4px solid var(--gold-main); }
+
+.p-controls { display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-top:8px; justify-content:space-between; }
+.p-ctrl-group { display:flex; align-items:center; gap:8px; background:#f8fafc; padding:8px 16px; border-radius:16px; border:1px solid #f1f5f9;}
+.p-ctrl-lbl { font-size:12px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; }
+.p-ctrl-val { border:none; background:transparent; font-size:16px; font-weight:700; color:#0f172a; outline:none; font-family:inherit; text-align:center; }
+
+.p-play-row { display:flex; gap:12px; margin-top:24px; }
+.btn-p-big { flex:1; height:60px; border-radius:16px; border:none; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit; transition:0.2s; }
+.btn-p-play { background:var(--blue-main); color:#fff; box-shadow:0 4px 15px rgba(93,131,185,0.3); }
+.btn-p-sec { background:#f1f5f9; color:#475569; }
+
+/* Sidebar */
+.cat-group { background:#f8fafc; border-radius:16px; padding:16px; margin-bottom:16px; border:1px solid #f1f5f9; }
+.cat-head { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+.cat-name { font-weight:700; font-size:16px; color:#0f172a; }
+.cat-stats { font-size:13px; font-weight:600; color:#64748b; margin-top:4px; }
+.lesson-list { display:none; margin-top:16px; flex-direction:column; gap:8px; }
+.l-item { display:flex; align-items:center; justify-content:space-between; padding:12px; background:#fff; border-radius:12px; border:1px solid #e2e8f0; cursor:pointer; }
+.l-item.active-l { border-color:var(--blue-main); box-shadow:0 0 0 1px var(--blue-main); }
+.l-name-chk { display:flex; align-items:center; gap:12px; }
+.custom-cb { width:20px; height:20px; border-radius:6px; border:2px solid #cbd5e1; appearance:none; outline:none; cursor:pointer; position:relative; background:#fff; }
+.custom-cb:checked { background:var(--green-main); border-color:var(--green-main); }
+.custom-cb:checked::after { content:"✔"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#fff; font-size:12px; font-weight:900; }
+.l-chip { font-size:11px; font-weight:700; text-transform:uppercase; padding:4px 8px; border-radius:6px; }
+.l-chip.done { background:#e6f6f0; color:var(--green-dark); }
+.l-chip.pend { background:#fef3c7; color:#b45309; }
+
+/* Dashboard Popup (Modal) */
+.modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.6); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:200; }
+.modal-content { background:#fff; border-radius:24px; padding:32px; width:90%; max-width:500px; box-shadow:0 20px 40px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto; position:relative; }
+.modal-close { position:absolute; top:20px; right:20px; font-size:24px; color:#94a3b8; cursor:pointer; line-height:1; }
+.modal-title { font-family:'Playfair Display',serif; font-size:22px; color:#0f172a; margin-bottom:24px; font-weight:600; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
+.stat-card { background:#f8fafc; padding:16px; border-radius:16px; text-align:center; border:1px solid #f1f5f9; }
+.stat-v { font-size:28px; font-weight:700; color:#0f172a; }
+.stat-l { font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; margin-top:4px; letter-spacing:0.5px; }
+.hist-item { display:flex; justify-content:space-between; padding:12px 16px; background:#f8fafc; border-radius:12px; margin-bottom:8px; border:1px solid #f1f5f9; }
+.hist-n { font-size:14px; font-weight:600; color:#334155; }
+.hist-t { font-size:12px; font-weight:500; color:#94a3b8; }
+
+/* Picker Modals (Pitch, Tala, Sound, ProSpeed) */
+.picker-list { display:flex; flex-direction:column; gap:8px; }
+.picker-item { padding:16px; background:#f8fafc; border-radius:16px; font-size:16px; font-weight:600; color:#334155; border:1px solid #f1f5f9; cursor:pointer; text-align:center; }
+.picker-item:active { background:#e2e8f0; }
+
+/* Custom Tala Builder */
+.builder-grid { display:grid; grid-template-columns:repeat(8, 1fr); gap:8px; margin-bottom:20px; }
+.builder-box { aspect-ratio:1; border-radius:8px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:#64748b; cursor:pointer; user-select:none; }
+.builder-box[data-val="1"] { background:#fff; border:2px solid var(--blue-main); color:var(--blue-main); }
+.builder-box[data-val="2"] { background:var(--blue-main); border:2px solid var(--blue-main); color:#fff; }
+.txt-input { width:100%; padding:14px; border-radius:12px; border:2px solid #e2e8f0; font-size:16px; font-weight:600; outline:none; font-family:inherit; margin-bottom:16px; }
+.txt-input:focus { border-color:var(--blue-main); }
+.btn-primary { width:100%; padding:16px; border-radius:16px; background:var(--blue-main); color:#fff; font-size:16px; font-weight:700; border:none; cursor:pointer; }
+
+/* --- PAGE 3: CONNECT --- */
+#page-3 { padding:20px; }
+.connect-card { background:linear-gradient(135deg, var(--blue-main), #82a4d4); border-radius:24px; padding:32px; color:#fff; margin-bottom:20px; box-shadow:0 10px 30px rgba(93,131,185,0.3); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="hamburger">≡</div>
+  <div class="app-title">TuneMate</div>
+  <div class="bell-wrap" onclick="showProgressModal()">🔔<div class="bell-dot"></div></div>
+</header>
+
+<!-- TOP TABS -->
+<div class="top-tabs-wrap">
+  <div class="top-tabs">
+    <button class="top-tab active" onclick="switchPage(1)">Sruthi/Metronome</button>
+    <button class="top-tab" onclick="switchPage(2)">Practice</button>
+    <button class="top-tab" onclick="switchPage(3)">Connect</button>
+  </div>
+</div>
+
+<!-- PAGE 1: SRUTHI/METRONOME -->
+<div id="page-1" class="page active">
+  <div class="p1-cards">
+    <!-- SRUTHI BOX -->
+    <div class="p1-card">
+      <div class="card-title"><span class="card-icon" style="color:var(--green-main);">〰️</span> Sruthi Box</div>
+      <button class="s-pitch-btn" onclick="openPitchPicker()">
+        <span class="s-pitch-num" id="s-pitch-disp">C# <span style="font-size:32px;">4</span></span>
+        <span class="s-pitch-lbl">Pitch</span>
+      </button>
+      <div class="s-vol-row">
+        <span>🔈</span>
+        <input type="range" class="vol-slider" id="s-vol-slider" min="0" max="1" step="0.01" value="0.5" oninput="setSVol(this.value)">
+        <span>🔊</span>
+      </div>
+      <button class="play-btn-huge play-green" id="s-play-btn" onclick="toggleShruti()">▶</button>
+      <div style="width:100%; margin-top:auto;">
+        <div class="s-pitch-lbl" style="margin-bottom:8px;">Favorite Sruthis</div>
+        <div class="s-favs">
+          <button class="s-fav-btn" onclick="setPitch('C',4)">C</button>
+          <button class="s-fav-btn active" onclick="setPitch('C#',4)">C#</button>
+          <button class="s-fav-btn" onclick="setPitch('D',4)">D</button>
+          <button class="s-fav-btn" onclick="setPitch('D#',4)">D#</button>
+          <button class="s-fav-btn" onclick="setPitch('E',4)">E</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- METRONOME BOX -->
+    <div class="p1-card">
+      <div class="card-title"><span class="card-icon" style="color:var(--blue-main);">◮</span> Metronome</div>
+      <div class="m-bpm-wrap" id="m-drag-area">
+        <input type="number" class="m-bpm-input" id="m-bpm-input" value="140" onchange="setBpm(this.value)">
+        <span class="m-bpm-lbl">BPM</span>
+      </div>
+      <div class="m-ts-row">
+        <button class="m-circle-btn" onclick="adjBpm(-1)">−</button>
+        <div class="m-ts-disp" id="m-ts-disp">4/4</div>
+        <button class="m-circle-btn" onclick="adjBpm(1)">+</button>
+      </div>
+      <button class="play-btn-huge play-blue" id="m-play-btn" onclick="toggleMetro()">▶</button>
+      <div class="m-bottom-btns" style="margin-top:auto;">
+        <button class="m-pill-btn" onclick="openTalaPicker()"><span id="m-tala-lbl">Adi Talam</span> ▾</button>
+        <button class="m-pill-btn" onclick="openSoundPicker()"><span id="m-snd-lbl">Wood Block</span> ▾</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- LIVE VISUALIZER -->
+  <div class="live-viz-wrap" id="live-viz">
+    <div class="viz-beats" id="viz-beats-container"></div>
+  </div>
+</div>
+
+<!-- PAGE 2: PRACTICE -->
+<div id="page-2" class="page">
+  <div class="greeting-row">Hi, <input type="text" id="p-username" class="greeting-input" value="Learner" onchange="saveName(this.value)"></div>
+  <div class="prac-split">
+    <!-- Sidebar -->
+    <aside class="prac-sidebar">
+      <div id="cat-list"></div>
+    </aside>
+    <!-- Main -->
+    <main class="prac-main">
+      <div class="prac-card">
+        <div class="p-lesson-header">
+          <div>
+            <div class="p-lesson-title" id="p-l-title">Select a Lesson</div>
+            <div class="p-lesson-cat" id="p-l-cat">Sidebar</div>
+          </div>
+          <button class="btn-pro" onclick="openProPicker()">✨ Learn Like a Pro</button>
+        </div>
+        <div id="pro-status" style="color:var(--gold-main); font-weight:700; margin-bottom:16px;"></div>
+        
+        <div class="p-notes-hwy" id="p-highway"></div>
+        
+        <div class="p-controls">
+          <div class="p-ctrl-group">
+            <span class="p-ctrl-lbl">BPM</span>
+            <input type="number" id="p-bpm-in" value="60" class="p-ctrl-val" style="width:50px;" onchange="pBpm=Number(this.value)">
+          </div>
+          <div class="p-ctrl-group">
+            <span class="p-ctrl-lbl">Inst</span>
+            <select id="p-inst-sel" class="p-ctrl-val" onchange="pInst=this.value">
+              <option value="Sine">Sine</option>
+              <option value="Piano">Piano</option>
+            </select>
+          </div>
+          <div class="p-ctrl-group">
+            <span class="p-ctrl-lbl">Sruthi</span>
+            <select id="p-shruti-sel" class="p-ctrl-val" onchange="pRoot=this.value">
+              <option value="C">C</option><option value="C#" selected>C#</option><option value="D">D</option><option value="D#">D#</option><option value="E">E</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-play-row">
+          <button class="btn-p-big btn-p-play" id="btn-p-play" onclick="startPractice()">▶ Play</button>
+          <button class="btn-p-big btn-p-sec" onclick="pausePractice()">⏸ Pause</button>
+          <button class="btn-p-big btn-p-sec" onclick="stopPractice()">⏹ Stop</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- PAGE 3: CONNECT -->
+<div id="page-3" class="page">
+  <div class="connect-card">
+    <div style="font-size:36px; font-weight:800; line-height:1; margin-bottom:8px;">12</div>
+    <div style="font-size:14px; font-weight:600; text-transform:uppercase; letter-spacing:1px; opacity:0.9;">Day Streak</div>
+    <p style="margin-top:16px; font-size:15px; font-weight:500; line-height:1.5;">You're in the top 5% of learners this week! Keep the rhythm going.</p>
+  </div>
+  <div class="prac-card" style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <div style="font-size:18px; font-weight:700; color:#0f172a;">Community Jam</div>
+      <div style="font-size:13px; font-weight:500; color:#64748b; margin-top:4px;">24 people practicing right now</div>
+    </div>
+    <button style="background:#f1f5f9; border:none; border-radius:12px; padding:10px 16px; font-weight:700; color:var(--blue-main);">Join ></button>
+  </div>
+</div>
+
+
+<!-- MODALS -->
+<!-- Progress Modal -->
+<div class="modal-overlay" id="modal-prog">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeModal('modal-prog')">×</div>
+    <div class="modal-title">Progress Dashboard</div>
+    <div class="grid-2" id="prog-grid"></div>
+    <div class="modal-title" style="font-size:18px; margin:24px 0 16px;">Recent History</div>
+    <div id="prog-hist"></div>
+  </div>
+</div>
+
+<!-- Pitch Picker -->
+<div class="modal-overlay" id="modal-pitch">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeModal('modal-pitch')">×</div>
+    <div class="modal-title">Select Sruthi</div>
+    <div class="picker-list" id="pitch-list"></div>
+  </div>
+</div>
+
+<!-- Tala Picker -->
+<div class="modal-overlay" id="modal-tala">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeModal('modal-tala')">×</div>
+    <div class="modal-title">Select Tala</div>
+    <div class="picker-list" id="tala-list"></div>
+  </div>
+</div>
+
+<!-- Custom Tala Builder -->
+<div class="modal-overlay" id="modal-custom-tala">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeModal('modal-custom-tala')">×</div>
+    <div class="modal-title">Custom Tala</div>
+    <div style="font-size:13px; color:#64748b; font-weight:600; margin-bottom:16px;">Tap to toggle: 0 (Silent), 1 (Normal), 2 (Accent)</div>
+    <div class="builder-grid" id="ct-grid"></div>
+    <input type="text" id="ct-input" class="txt-input" placeholder="e.g. 1,0,2,1">
+    <input type="text" id="ct-name" class="txt-input" placeholder="Tala Name" style="margin-top:-8px;">
+    <button class="btn-primary" onclick="saveCustomTala()">Save Tala</button>
+  </div>
+</div>
+
+<!-- Sound Picker -->
+<div class="modal-overlay" id="modal-sound">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeModal('modal-sound')">×</div>
+    <div class="modal-title">Metronome Sound</div>
+    <div class="picker-list">
+      <div class="picker-item" onclick="pickSound('Click')">Click</div>
+      <div class="picker-item" onclick="pickSound('Wood Block')">Wood Block</div>
+      <div class="picker-item" onclick="pickSound('Bell')">Bell</div>
+      <div class="picker-item" onclick="pickSound('Clap')">Clap</div>
+    </div>
+  </div>
+</div>
+
+<!-- Pro Mode Speed Picker -->
+<div class="modal-overlay" id="modal-pro">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeModal('modal-pro')">×</div>
+    <div class="modal-title">Learn Like a Pro</div>
+    <p style="font-size:14px; font-weight:500; color:#475569; margin-bottom:16px;">Enter a speed sequence separated by commas. The app will play through the current category at these speeds automatically.</p>
+    <input type="text" id="pro-speeds" class="txt-input" placeholder="e.g. 60, 120, 180" value="60, 120, 240">
+    <button class="btn-primary" onclick="startProMode()">Start Session</button>
+  </div>
+</div>
+
+<script>
+// --- GLOBALS & DATA ---
+const ALL_PITCHES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const ROOT_FREQS = { 'C':261.63, 'C#':277.18, 'D':293.66, 'D#':311.13, 'E':329.63, 'F':349.23, 'F#':369.99, 'G':392.00, 'G#':415.30, 'A':440.00, 'A#':466.16, 'B':493.88 };
+const RATIOS = { s:1.0, r:1.1225, g:1.2599, m:1.3348, p:1.4983, d:1.6818, n:1.8877, sa:2.0 };
+
+const DEFAULT_TALAS = {
+  'Adi Talam': [2,1,1,1,2,1,2,1],
+  'Rupaka Talam': [2,1,2,1,1,1],
+  'Misra Chapu': [1,0,1,1,0,1,1],
+  'Khanda Chapu': [1,0,1,1,1]
+};
+
+const LESSON_NOTES_DATA = {
+'Sarali Varusai': [
+['s','r','g','m','p','d','n','sa','sa','n','d','p','m','g','r','s'],
+['s','r','s','r','s','r','g','m','s','r','g','m','p','d','n','sa','sa','n','sa','n','sa','n','d','p','sa','n','d','p','m','g','r','s'],
+['s','r','g','m','p_2','s','r','s','r','g','m','p','d','n','sa','sa','n','d','p','m_2','sa','n','sa','n','d','p','m','g','r','s'],
+['s_con','r_con','g_con','m_con','p_con','d_con','n_con','sa_con']
+],
+'Jandai Varusai': [
+['s','s','r','r','g','g','m','m','p','p','d','d','n','n','sa','sa','sa','sa','n','n','d','d','p','p','m','m','g','g','r','r','s','s']
+]
+};
+
+const ls = {
+  get: (k, d) => { try{ return JSON.parse(localStorage.getItem(k)) || d; }catch{ return d;} },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v))
+};
+const $ = id => document.getElementById(id);
+
+let appCtx;
+function getCtx() {
+  if(!appCtx) appCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(appCtx.state==='suspended') appCtx.resume();
+  return appCtx;
+}
+
+// --- INIT ---
+function init() {
+  $('p-username').value = ls.get('tm_username', 'Learner');
+  
+  // Metronome drag logic
+  let bWrap = $('m-drag-area'), startY, startV;
+  bWrap.addEventListener('touchstart', e => { startY = e.touches[0].clientY; startV = mBpm; }, {passive:true});
+  bWrap.addEventListener('touchmove', e => { let dy = startY - e.touches[0].clientY; setBpm(startV + Math.floor(dy/2)); }, {passive:false});
+  bWrap.addEventListener('mousedown', e => { startY = e.clientY; startV = mBpm; 
+    let move = ev => { let dy = startY - ev.clientY; setBpm(startV + Math.floor(dy/2)); };
+    let up = () => { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+  });
+
+  renderSidebar();
+}
+window.onload = init;
+
+function switchPage(p) {
+  if (appCtx) appCtx.resume();
+  document.querySelectorAll('.top-tab').forEach((el,i) => el.classList.toggle('active', i===p-1));
+  document.querySelectorAll('.page').forEach((el,i) => el.classList.toggle('active', i===p-1));
+}
+
+function saveName(n) { ls.set('tm_username', n); }
+
+function showModal(id) { $(id).style.display='flex'; }
+function closeModal(id) { $(id).style.display='none'; }
+
+// --- PAGE 1: SRUTHI ---
+let sRunning=false, sRoot='C#', sOct=4, sVol=0.5, sNodes=[];
+
+function setSVol(v) { 
+  sVol = parseFloat(v); 
+  sNodes.forEach(n => n.mg.gain.setTargetAtTime(sVol, getCtx().currentTime, 0.1)); 
+}
+
+function setPitch(p, o) {
+  sRoot = p; sOct = o;
+  $('s-pitch-disp').innerHTML = `${p} <span style="font-size:32px;">${o}</span>`;
+  document.querySelectorAll('.s-fav-btn').forEach(b => b.classList.toggle('active', b.innerText===p));
+  closeModal('modal-pitch');
+  if(sRunning) { stopShruti(); startShruti(); }
+}
+
+function openPitchPicker() {
+  let h = '';
+  ALL_PITCHES.forEach(p => {
+    h += `<div class="picker-item" onclick="setPitch('${p}', 4)">${p} 4</div>`;
+  });
+  $('pitch-list').innerHTML = h;
+  showModal('modal-pitch');
+}
+
+function toggleShruti() {
+  getCtx().resume();
+  sRunning = !sRunning;
+  let btn = $('s-play-btn');
+  if(sRunning) {
+    btn.innerHTML = '⏸'; btn.style.background = '#475569'; btn.style.boxShadow = 'none';
+    startShruti();
+  } else {
+    btn.innerHTML = '▶'; btn.style.background = 'var(--green-main)'; btn.style.boxShadow = '0 8px 24px rgba(125, 211, 179, 0.4)';
+    stopShruti();
+  }
+}
+
+function startShruti() {
+  let ctx = getCtx();
+  let f = ROOT_FREQS[sRoot]; if(sOct===5) f*=2; if(sOct===3) f/=2;
+  
+  let targetFreqs = [f, f*1.4983]; // Sa and Pa
+  targetFreqs.forEach(freq => {
+    let mg = ctx.createGain();
+    mg.gain.value = 0; mg.gain.setTargetAtTime(sVol, ctx.currentTime, 0.3);
+    mg.connect(ctx.destination);
+    
+    let o1=ctx.createOscillator(); o1.type='sawtooth'; o1.frequency.value=freq;
+    let o2=ctx.createOscillator(); o2.type='sawtooth'; o2.frequency.value=freq+0.5;
+    let flt=ctx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=freq*3;
+    
+    o1.connect(flt); o2.connect(flt); flt.connect(mg);
+    o1.start(); o2.start();
+    sNodes.push({ mg, oscs: [o1,o2] });
+  });
+}
+
+function stopShruti() {
+  let ctx = getCtx();
+  sNodes.forEach(n => {
+    n.mg.gain.setTargetAtTime(0, ctx.currentTime, 0.3);
+    setTimeout(() => { n.oscs.forEach(o=>o.stop()); n.mg.disconnect(); }, 400);
+  });
+  sNodes = [];
+}
+
+
+// --- PAGE 1: METRONOME ---
+let mRunning=false, mBpm=140, mSound='Wood Block', mTalaName='Adi Talam';
+let mTalaArr = DEFAULT_TALAS['Adi Talam'];
+let mNextTime=0, mBeat=0;
+
+function setBpm(v) {
+  mBpm = Math.max(20, Math.min(300, parseInt(v)||140));
+  $('m-bpm-input').value = mBpm;
+}
+function adjBpm(d) { setBpm(mBpm+d); }
+
+function getAllTalas() { return { ...DEFAULT_TALAS, ...ls.get('tm_custom_talas', {}) }; }
+
+function openTalaPicker() {
+  let talas = getAllTalas();
+  let h = '';
+  for(let t in talas) h += `<div class="picker-item" onclick="pickTala('${t}')">${t}</div>`;
+  h += `<div class="picker-item" style="color:var(--blue-main); border-color:var(--blue-main);" onclick="openCustomTala()">+ Custom Tala</div>`;
+  $('tala-list').innerHTML = h;
+  showModal('modal-tala');
+}
+
+function pickTala(t) {
+  mTalaName = t; mTalaArr = getAllTalas()[t];
+  $('m-tala-lbl').innerText = t;
+  let len = mTalaArr.length;
+  $('m-ts-disp').innerText = `${len}/4`;
+  mBeat = 0; buildLiveViz();
+  closeModal('modal-tala');
+}
+
+function openSoundPicker() { showModal('modal-sound'); }
+function pickSound(s) { mSound=s; $('m-snd-lbl').innerText=s; closeModal('modal-sound'); }
+
+function toggleMetro() {
+  getCtx().resume();
+  mRunning = !mRunning;
+  let btn = $('m-play-btn');
+  let viz = $('live-viz');
+  if(mRunning) {
+    btn.innerHTML = '⏸'; btn.style.background = '#475569'; btn.style.boxShadow = 'none';
+    viz.classList.add('active');
+    mNextTime = getCtx().currentTime + 0.1;
+    mBeat = 0; buildLiveViz(); metroTick();
+  } else {
+    btn.innerHTML = '▶'; btn.style.background = 'var(--blue-main)'; btn.style.boxShadow = '0 8px 24px rgba(93, 131, 185, 0.4)';
+    viz.classList.remove('active');
+  }
+}
+
+function metroTick() {
+  let ctx = getCtx();
+  while(mNextTime < ctx.currentTime + 0.1) {
+    let type = mTalaArr[mBeat];
+    if(type !== 0) playClick(mNextTime, type===2);
+    
+    let bIdx = mBeat;
+    setTimeout(() => {
+      let beats = document.querySelectorAll('.viz-beat');
+      beats.forEach(b => b.classList.remove('playing'));
+      if(beats[bIdx]) beats[bIdx].classList.add('playing');
+    }, (mNextTime - ctx.currentTime)*1000);
+
+    mNextTime += 60.0 / mBpm;
+    mBeat = (mBeat + 1) % mTalaArr.length;
+  }
+  if(mRunning) setTimeout(metroTick, 25);
+}
+
+function playClick(t, acc) {
+  let ctx = getCtx();
+  let g = ctx.createGain(); g.connect(ctx.destination);
+  g.gain.setValueAtTime(acc?1.0:0.5, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.1);
+  
+  if(mSound==='Click' || mSound==='Wood Block') {
+    let o = ctx.createOscillator(); o.type='sine'; o.frequency.value = acc?1000:600;
+    o.connect(g); o.start(t); o.stop(t+0.1);
+  } else if(mSound==='Bell') {
+    let o = ctx.createOscillator(); o.type='sine'; o.frequency.value = acc?2000:1500;
+    o.connect(g); o.start(t); o.stop(t+0.5);
+  } else { // Clap
+    let bs = ctx.sampleRate*0.1; let bf = ctx.createBuffer(1, bs, ctx.sampleRate);
+    let dt = bf.getChannelData(0); for(let i=0;i<bs;i++) dt[i]=Math.random()*2-1;
+    let ns = ctx.createBufferSource(); ns.buffer=bf;
+    let fl = ctx.createBiquadFilter(); fl.type='bandpass'; fl.frequency.value=1200;
+    ns.connect(fl); fl.connect(g); ns.start(t);
+  }
+}
+
+function buildLiveViz() {
+  let h = '';
+  mTalaArr.forEach((v,i) => {
+    let cls = 'viz-beat';
+    if(v===0) cls += ' silent';
+    if(v===2) cls += ' accent';
+    h += `<div class="${cls}" id="vb-${i}">${i+1}</div>`;
+  });
+  $('viz-beats-container').innerHTML = h;
+}
+
+// Custom Tala
+let ctArr = [];
+function openCustomTala() {
+  closeModal('modal-tala');
+  ctArr = [1,1,1,1];
+  renderCTGrid(); updateCTInput();
+  $('ct-name').value = '';
+  showModal('modal-custom-tala');
+}
+function renderCTGrid() {
+  let h = '';
+  for(let i=0;i<16;i++) {
+    let v = ctArr[i] !== undefined ? ctArr[i] : -1;
+    if(v!==-1) h+= `<div class="builder-box" data-val="${v}" onclick="cycCT(${i})">${v}</div>`;
+    else h+= `<div class="builder-box" style="opacity:0.3" onclick="ctArr[${i}]=1;renderCTGrid();updateCTInput();">+</div>`;
+  }
+  $('ct-grid').innerHTML = h;
+}
+function cycCT(i) {
+  ctArr[i] = (ctArr[i]+1)%3;
+  renderCTGrid(); updateCTInput();
+}
+function updateCTInput() { $('ct-input').value = ctArr.join(','); }
+$('ct-input').addEventListener('input', e => {
+  let raw = e.target.value.split(',');
+  ctArr = raw.map(x => parseInt(x.trim())).filter(x => !isNaN(x) && x>=0 && x<=2);
+  renderCTGrid();
+});
+function saveCustomTala() {
+  let nm = $('ct-name').value.trim() || 'My Tala';
+  let c = ls.get('tm_custom_talas', {});
+  c[nm] = ctArr.length ? ctArr : [1,1,1,1];
+  ls.set('tm_custom_talas', c);
+  pickTala(nm);
+  closeModal('modal-custom-tala');
+}
+
+
+// --- PAGE 2: PRACTICE (Learn With Me) ---
+let pCat='', pLIdx=0, pNotes=[], pLName='';
+let pRunning=false, pBpm=60, pInst='Sine', pRoot='C#';
+let pNoteIdx=0, pNextTime=0, pTimerId;
+let pKOsc, pKGain;
+
+let pmActive=false, pmSpeeds=[], pmSIdx=0, pmLIdx=0;
+
+function renderSidebar() {
+  let h=''; let prog = ls.get('tm_prog', {});
+  for(let c in LESSON_NOTES_DATA) {
+    let lsns = LESSON_NOTES_DATA[c];
+    let lnd=0; for(let i=0;i<lsns.length;i++) if(prog[c]?.[i]) lnd++;
+    h += `<div class="cat-group">
+      <div class="cat-head" onclick="togglePCat('${c}')">
+        <span class="cat-name">${c}</span>
+        <span class="cat-stats">${lnd}/${lsns.length} Learned</span>
+      </div>
+      <div class="lesson-list" id="pcat-${c.replace(/\s/g,'_')}">`;
+    lsns.forEach((l,i)=>{
+      let isD = prog[c]?.[i];
+      h += `<div class="l-item" id="li-${c.replace(/\s/g,'_')}-${i}" onclick="loadLesson('${c}',${i})">
+        <div class="l-name-chk">
+          <input type="checkbox" class="custom-cb" ${isD?'checked':''} onclick="event.stopPropagation()" onchange="toggleLDone('${c}',${i},this.checked)">
+          <span style="font-weight:600; color:#334155; font-size:14px;">Lesson ${i+1}</span>
+        </div>
+        <div class="l-chip ${isD?'done':'pend'}">${isD?'Done':'Pending'}</div>
+      </div>`;
+    });
+    h += `</div></div>`;
+  }
+  $('cat-list').innerHTML = h;
+}
+
+function togglePCat(c) {
+  let el = $(`pcat-${c.replace(/\s/g,'_')}`);
+  if(el) el.style.display = el.style.display==='flex'?'none':'flex';
+}
+function toggleLDone(c, i, st) {
+  let p = ls.get('tm_prog', {}); if(!p[c]) p[c]={}; p[c][i]=st;
+  ls.set('tm_prog', p); renderSidebar();
+}
+
+function loadLesson(c, i) {
+  pCat=c; pLIdx=i; pLName=`Lesson ${i+1}`;
+  $('p-l-title').innerText = pLName; $('p-l-cat').innerText = c;
+  
+  document.querySelectorAll('.l-item').forEach(el=>el.classList.remove('active-l'));
+  let li = $(`li-${c.replace(/\s/g,'_')}-${i}`); if(li) li.classList.add('active-l');
+
+  let raw = LESSON_NOTES_DATA[c][i];
+  pNotes = raw.map(x=>{
+    let pts=x.split('_'); 
+    return { n:pts[0], d:pts.length>1 && !isNaN(parseFloat(pts[1])) ? parseFloat(pts[1]) : 1, con: pts.includes('con') };
+  });
+  
+  let h='';
+  pNotes.forEach((n,idx)=>{
+    let w=56; if(n.d>1) w*=n.d; if(n.d<1) w*=0.6;
+    let cls = 'p-note'; if(n.con) cls += ' con-note';
+    h += `<div class="${cls}" id="pn-${idx}" style="min-width:${w}px;">${n.n}</div>`;
+  });
+  $('p-highway').innerHTML = h;
+}
+
+function startPractice() {
+  getCtx().resume();
+  if(!pNotes.length || pRunning) return;
+  pRunning = true; if(pNoteIdx>=pNotes.length) pNoteIdx=0;
+  pNextTime = getCtx().currentTime + 0.1;
+  let btn = $('btn-p-play'); btn.innerHTML='⏸ Playing'; btn.style.background='#eab308'; btn.style.boxShadow='0 4px 15px rgba(234,179,8,0.3)';
+  pTick();
+}
+function pausePractice() { pRunning=false; stopPInst(); let btn=$('btn-p-play'); btn.innerHTML='▶ Play'; btn.style.background='var(--blue-main)'; btn.style.boxShadow='0 4px 15px rgba(93,131,185,0.3)'; }
+function stopPractice() {
+  pRunning=false; stopPInst(); pNoteIdx=0; 
+  let btn=$('btn-p-play'); btn.innerHTML='▶ Play'; btn.style.background='var(--blue-main)'; btn.style.boxShadow='0 4px 15px rgba(93,131,185,0.3)';
+  document.querySelectorAll('.p-note').forEach(c=>c.classList.remove('active'));
+  if(!pmActive && pCat) logHist(`${pCat} - ${pLName}`);
+}
+
+function pTick() {
+  let ctx = getCtx();
+  while(pNextTime < ctx.currentTime + 0.1) {
+    if(pNoteIdx >= pNotes.length) {
+      if(pmActive) {
+        setTimeout(pmNext, 400); return;
+      } else { stopPractice(); return; }
+    }
+    
+    let nd = pNotes[pNoteIdx];
+    let dur = nd.d * (60.0/pBpm);
+    playPNote(nd.n, pNextTime, dur, nd.con);
+    
+    let idx = pNoteIdx;
+    setTimeout(()=>{
+      document.querySelectorAll('.p-note').forEach(c=>c.classList.remove('active'));
+      let el = $(`pn-${idx}`);
+      if(el) { el.classList.add('active'); el.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }
+    }, (pNextTime-ctx.currentTime)*1000);
+    
+    pNextTime += dur; pNoteIdx++;
+  }
+  if(pRunning) pTimerId = setTimeout(pTick, 25);
+}
+
+function playPNote(n, t, dur, con) {
+  let ctx = getCtx();
+  let baseF = ROOT_FREQS[pRoot] * RATIOS[n];
+  
+  if(pInst==='Sine' || pInst==='Piano') {
+    if(!pKOsc || !con) {
+      if(pKOsc && !con) stopPInst();
+      pKOsc = ctx.createOscillator(); pKGain = ctx.createGain();
+      pKOsc.type = pInst==='Sine'?'sine':'triangle';
+      pKOsc.connect(pKGain); pKGain.connect(ctx.destination);
+      pKOsc.frequency.value = baseF;
+      pKGain.gain.setValueAtTime(0, t);
+      pKGain.gain.linearRampToValueAtTime(pInst==='Sine'?0.5:0.8, t+0.05);
+      pKOsc.start(t);
+    } else if (con) {
+      pKOsc.frequency.exponentialRampToValueAtTime(baseF, t+0.05);
+    }
+    if(!con) {
+      pKGain.gain.exponentialRampToValueAtTime(0.001, t+dur-0.02);
+      pKOsc.stop(t+dur);
+      setTimeout(()=>{if(!pRunning || !con) stopPInst();}, (t+dur-ctx.currentTime)*1000);
+    } else {
+      // It's a continuous note, it will be stopped by the next non-con note or stopPractice
+    }
+  }
+}
+function stopPInst() { if(pKOsc){ try{pKOsc.stop();}catch{} pKOsc.disconnect(); pKGain.disconnect(); pKOsc=null; } }
+
+// Pro Mode
+function openProPicker() { if(!pCat){alert("Select a category first!"); return;} showModal('modal-pro'); }
+function startProMode() {
+  pmSpeeds = $('pro-speeds').value.split(',').map(x=>parseInt(x.trim())).filter(x=>!isNaN(x));
+  if(!pmSpeeds.length) pmSpeeds=[60];
+  pmActive = true; pmSIdx=0; pmLIdx=0;
+  closeModal('modal-pro');
+  $('p-bpm-in').disabled=true;
+  pmNext();
+}
+function stopProMode() { pmActive=false; $('p-bpm-in').disabled=false; $('pro-status').innerText=''; stopPractice(); }
+function pmNext() {
+  let lsns = LESSON_NOTES_DATA[pCat];
+  if(pmLIdx >= lsns.length) {
+    pmLIdx=0; pmSIdx++;
+    if(pmSIdx >= pmSpeeds.length) {
+      $('pro-status').innerText = "✨ Pro Mode Complete!"; stopProMode(); logHist(`${pCat} Pro Run`); return;
+    }
+  }
+  loadLesson(pCat, pmLIdx);
+  pBpm = pmSpeeds[pmSIdx]; $('p-bpm-in').value=pBpm;
+  $('pro-status').innerText = `✨ Pro Mode: Lesson ${pmLIdx+1} @ ${pBpm} BPM`;
+  pNoteIdx=0; pRunning=true; pNextTime=getCtx().currentTime+0.1; pTick();
+  pmLIdx++;
+}
+
+// Progress & History
+function logHist(n) {
+  let h = ls.get('tm_hist', []); let d = new Date();
+  h.unshift({ n, t: d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + ' ' + d.toLocaleDateString() });
+  if(h.length>100) h=h.slice(0,100); ls.set('tm_hist', h);
+}
+
+function showProgressModal() {
+  let tot=0, cmp=0; let p=ls.get('tm_prog',{});
+  for(let c in LESSON_NOTES_DATA) { let l=LESSON_NOTES_DATA[c]; tot+=l.length; for(let i=0;i<l.length;i++) if(p[c]?.[i]) cmp++; }
+  let pend=tot-cmp; let pct=tot?Math.round((cmp/tot)*100):0;
+  $('prog-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-v">${tot}</div><div class="stat-l">Total</div></div>
+    <div class="stat-card"><div class="stat-v" style="color:var(--green-main);">${cmp}</div><div class="stat-l">Done</div></div>
+    <div class="stat-card"><div class="stat-v" style="color:#f87171;">${pend}</div><div class="stat-l">Pending</div></div>
+    <div class="stat-card"><div class="stat-v" style="color:var(--blue-main);">${pct}%</div><div class="stat-l">Progress</div></div>
+  `;
+  let h=ls.get('tm_hist',[]);
+  $('prog-hist').innerHTML = h.slice(0,8).map(x=>`<div class="hist-item"><div class="hist-n">${x.n}</div><div class="hist-t">${x.t}</div></div>`).join('');
+  showModal('modal-prog');
+}
+</script>
+</body>
+</html>
