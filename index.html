@@ -42,7 +42,13 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 20px; background: transparent; flex-shrink: 0;
 }
-.hamburger { font-size: 26px; color: #888; cursor: pointer; line-height: 1; }
+
+.app-footnote {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; background: transparent; flex-shrink: 0;
+}
+
+.ger { font-size: 26px; color: #888; cursor: pointer; line-height: 1; }
 .app-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 600; color: #111; letter-spacing: -0.5px; }
 .bell-wrap { position: relative; font-size: 24px; color: #888; cursor: pointer; }
 .bell-dot { position: absolute; top: 0px; right: 0px; width: 8px; height: 8px; background: var(--green-main); border-radius: 50%; border: 1px solid #fff; }
@@ -138,6 +144,11 @@ body {
 .btn-p-play { background:var(--blue-main); color:#fff; box-shadow:0 4px 15px rgba(93,131,185,0.3); }
 .btn-p-sec { background:#f1f5f9; color:#475569; }
 
+.logo {
+    width: 100px;
+    mix-blend-mode: multiply;
+}
+
 /* Sidebar */
 .cat-group { background:#f8fafc; border-radius:16px; padding:16px; margin-bottom:16px; border:1px solid #f1f5f9; }
 .cat-head { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
@@ -191,8 +202,8 @@ body {
 
 <!-- HEADER -->
 <header class="app-header">
-  <div class="hamburger"></div>
-  <div class="app-title">TuneMate</div>
+  <div class="app-header"></div>
+  <div class="app-title"><img class="logo" src="logo.png" alt="Logo"> <br>TuneMate</div>
  <div class="bell-wrap" onclick!="showProgressModal()"><div class=""></div></div>
 </header>
 
@@ -395,6 +406,18 @@ body {
     <button class="btn-primary" onclick="startProMode()">Start Session</button>
   </div>
 </div>
+
+<!-- FOOTER -->
+<footer class="app-header">
+  <div class="app-header"></div>
+  <div class="app-header">Copy Right Kalaa Srushti Academy &copy; 2026</div><div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div class="app-header"><br>Developed and maintained by Ramadass</div>
+ <div class="app-header"></div>
+  </footer>
 
 <script>
 // --- GLOBALS & DATA ---
