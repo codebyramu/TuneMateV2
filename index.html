@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TuneMate</title>
+<title>Tune--Mate</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 <style>
 /* --- VARIABLES & RESET --- */
@@ -44,7 +44,7 @@ body {
 }
 
 .app-footnote {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between; font-size: 12px;
   padding: 16px 20px; background: transparent; flex-shrink: 0;
 }
 
@@ -69,8 +69,8 @@ body {
 
 /* --- PAGE 1: SRUTHI/METRONOME (NO SCROLL) --- */
 #page-1 { padding-bottom: 20px; }
-.p1-cards { display: flex; gap: 16px; flex-direction: column; flex-shrink: 0; }
-@media(min-width: 768px) { .p1-cards { flex-direction: row; } }
+.p1-cards { display: flex; gap: 16px; flex-direction: column; flex-shrink: 0; overflow:hidden }
+@media(min-width: 760px) { .p1-cards { flex-direction: row; }}
 .p1-card {
   flex: 1; background: var(--bg-card); border-radius: 24px; padding: 24px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;
@@ -269,17 +269,17 @@ body {
     <div class="viz-beats" id="viz-beats-container"></div>
   </div>
 </div>
-
+-->
 <!-- PAGE 2: PRACTICE -->
-<div id="page-2" class="page">
+<!--<div id="page-2" class="page">
   <div class="greeting-row">Hi, <input type="text" id="p-username" class="greeting-input" value="Learner" onchange="saveName(this.value)"></div>
-  <div class="prac-split">
+  <div class="prac-split"> -->
     <!-- Sidebar -->
-    <aside class="prac-sidebar">
+  <!--  <aside class="prac-sidebar">
       <div id="cat-list"></div>
-    </aside>
+    </aside> -->
     <!-- Main -->
-    <main class="prac-main">
+   <!-- <main class="prac-main">
       <div class="prac-card">
         <div class="p-lesson-header">
           <div>
@@ -318,7 +318,7 @@ body {
           <button class="btn-p-big btn-p-sec" onclick="stopPractice()">⏹ Stop</button>
         </div>
       </div>
-    </main>
+    </main> -->
   </div>
 </div>
 
@@ -396,7 +396,7 @@ body {
   </div>
 </div>
 
-<!-- Pro Mode Speed Picker -->
+<!-- Pro Mode Speed Picker 
 <div class="modal-overlay" id="modal-pro">
   <div class="modal-content">
     <div class="modal-close" onclick="closeModal('modal-pro')">×</div>
@@ -406,18 +406,25 @@ body {
     <button class="btn-primary" onclick="startProMode()">Start Session</button>
   </div>
 </div>
-
+-->
 <!-- FOOTER -->
+
 <footer class="app-header">
-  <div class="app-title"></div>
-  <div class="app-header">Copy Right Kalaa Srushti Academy &copy; 2026</div>
-  <div class="app-title"></div>
+  <div class="footnote"></div>
+  <div class="footnote"></div>
+  <div class="footnote"></div>
   </footer>
 
 <footer class="app-header">
-  <div class="app-title"></div>
-  <div class="app-header"><br>Developed and maintained by Ramadass</div>
- <div class="app-title"></div>
+  <div class="footnote"></div>
+  <div class="footnote">Copyright Kalaa Srushti Academy &copy; 2026</div>
+  <div class="footnote"></div>
+  </footer>
+
+<footer class="app-header">
+  <div class="footnote"></div>
+  <div class="footnote"><br>Developed and maintained by Ramadass</div>
+ <div class="footnote"></div>
   </footer>
 
 
