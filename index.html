@@ -49,7 +49,7 @@ body {
   align-items: flex-start;
   gap: 2px;
 }
-.logo { width: 48px; }
+.logo { width: 120px; }
 .academy-name {
   font-size: 10px;
   font-weight: 600;
@@ -81,8 +81,8 @@ body {
 .p1-cards {
   display: flex;
   gap: 16px;
-  width: 60%;
-  max-width: 900px;
+  width: 80%;
+  max-width: 1000px;
   min-height: 0;
 }
 @media(max-width: 759px) {
@@ -202,7 +202,7 @@ body {
       <div class="card-title"><span class="card-icon" style="color:var(--green-main);">〰️</span> Sruthi Box</div>
 
       <button class="s-pitch-btn" onclick="openPitchPicker()">
-        <span class="s-pitch-num" id="s-pitch-disp">C# <span style="font-size:32px;">4</span></span>
+        <span class="s-pitch-num" id="s-pitch-disp">C#</span>
         <span class="s-pitch-lbl">Pitch</span>
       </button>
       <div class="s-vol-row">
@@ -348,14 +348,14 @@ function setSVol(v) {
 
 function setPitch(p,o) {
   sRoot=p; sOct=o;
-  $('s-pitch-disp').innerHTML=`${p} <span style="font-size:32px;">${o}</span>`;
+  $('s-pitch-disp').innerHTML=`${p}`;
   closeModal('modal-pitch');
   if(sRunning){ stopShruti(); startShruti(); }
 }
 
 function openPitchPicker() {
   let h='';
-  ALL_PITCHES.forEach(p=>{ h+=`<div class="picker-item" onclick="setPitch('${p}',4)">${p} 4</div>`; });
+  ALL_PITCHES.forEach(p=>{ h+=`<div class="picker-item" onclick="setPitch('${p}',4)">${p}</div>`; });
   $('pitch-list').innerHTML=h;
   showModal('modal-pitch');
 }
