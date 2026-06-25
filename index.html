@@ -3,8 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TuneMate</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>Kalaa Srushti Academy - TuneMate</title>
+<link href="https://fonts.googleapis.com/css2?family=Trebuchet MS:wght@400;500;600;700;800&family=Trebuchet MS:wght@600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg-app: #f4f7f9;
@@ -22,24 +27,25 @@
 * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
 html, body {
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-app);
-  color: var(--text-main);
-  display: flex;
-  flex-direction: column;
+  font-family: 'Trebuchet MS', sans-serif; background-color: var(--bg-app);
+  color: var(--text-main); width: 100%; min-width: 480px;
+  min-height: 100vh; height: 100%; align-items: center; justify-content: space-evenly;
+
+  	background-image: url('http://googleusercontent.com/image_generation_content/0.png');
+    background-size: cover;             /* Scales the image to cover the entire screen */
+    background-position: center center; /* Centers the musical instruments on the page */
+    background-repeat: no-repeat;       /* Prevents the image from tiling grid-style */
+    background-attachment: fixed;       /* Keeps the background stationary while scrolling */
 }
 
 .app-header {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 14px 20px 8px;
-  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 10px 10px; background: transparent; flex-shrink: 0; width: 100%;
 }
+
 .header-left {
   position: absolute;
   left: 20px;
@@ -49,41 +55,29 @@ body {
   align-items: flex-start;
   gap: 2px;
 }
-.logo { width: 80px; mix-blend-mode: multiply; }
+
+.logo { width: 100px; height: auto; mix-blend-mode: multiply; }
+
 .academy-name {
-  font-size: 10px;
+  font-size: 40px;
   font-weight: 600;
-  color: #94a3b8;
-  letter-spacing: 0.3px;
+  color: #0088ff;
+  letter-spacing: 0.5px;
   line-height: 1.2;
-  max-width: 90px;
+  width: 100%;
 }
-.app-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: #111;
-  letter-spacing: -0.5px;
-  text-align: center;
-}
+.app-title { font-family: 'Trebuchet MS', sans-serif; font-size: 24px; font-weight: 600; color: #111; letter-spacing: -0.5px; }
 
 .main-content {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 20px;
-  min-height: 0;
+  display: flex; animation: fadeIn 0.3s ease; width: 100%; padding: 10px 50px 10px 50px; align-items: center; justify-content: center;
 }
 
 .p1-cards {
   display: flex;
-  gap: 16px;
-  width: 70%;
-  max-width: 900px;
+  gap: 10px;
+  width: 100%;
   min-height: 0;
+  justify-content: center;
 }
 @media(max-width: 759px) {
   .p1-cards { flex-direction: column; width: 92%; overflow-y: auto; padding-bottom: 16px; }
@@ -124,7 +118,7 @@ body {
   cursor: pointer;
   margin-bottom: 20px;
 }
-.s-pitch-num { font-size: 56px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; }
+.s-pitch-num { font-size: 32px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; }
 .s-pitch-lbl { font-size: 13px; color: #94a3b8; font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
 .s-vol-row { display: flex; align-items: center; gap: 12px; width: 100%; margin-bottom: 24px; max-width: 260px; }
 .s-vol-row span { color: #cbd5e1; font-size: 18px; }
@@ -140,7 +134,7 @@ body {
 .s-fav-btn.active { background: var(--green-light); color: var(--green-dark); border-color: var(--green-dark); box-shadow: 0 0 0 1px var(--green-dark); }
 
 .m-bpm-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; cursor: ns-resize; }
-.m-bpm-input { font-size: 64px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; text-align: center; border: none; background: transparent; width: 120px; outline: none; font-family: inherit; padding: 0; margin: 0; }
+.m-bpm-input { font-size: 32px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; text-align: center; border: none; background: transparent; width: 120px; outline: none; font-family: inherit; padding: 0; margin: 0; }
 .m-bpm-lbl { font-size: 13px; color: #94a3b8; font-weight: 600; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
 .m-ts-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 20px; }
 .m-circle-btn { width: 44px; height: 44px; border-radius: 50%; background: #f1f5f9; border: none; color: #64748b; font-size: 24px; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; line-height: 0; }
@@ -159,12 +153,20 @@ body {
 
 .app-footer {
   flex-shrink: 0;
+  flex-direction: column;
   display: flex;
-  justify-content: space-between;
-  padding: 6px 16px 10px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 10px 10px 10px;
+}
+
+.footer-text{
+  justify-content: center;
   font-size: 10px;
   color: #b0b8c1;
   font-weight: 800;
+  line-height: 2;
 }
 
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 200; }
@@ -189,9 +191,9 @@ body {
 <body>
 
 <header class="app-header">
-  <div class="header-left">
-    <img class="logo" src="logo.png" alt="Logo">
-    <span class="academy-name">Kalaa Srushti Academy</span>
+  <div style="justify-content: space-evenly; align-items: center; display: flex; flex-direction: row;">
+  	<img class="logo" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+  	<p class="academy-name" >Kalaa Srushti Academy</p>
   </div>
   <div class="app-title">TuneMate</div>
 </header>
@@ -199,7 +201,7 @@ body {
 <div class="main-content">
   <div class="p1-cards">
     <div class="p1-card">
-      <div class="card-title"><span class="card-icon" style="color:var(--green-main);">〰️</span> Sruthi Box</div>
+      <div class="card-title"><div class="card-icon" style="color:var(--green-main);">〰️</div> Sruthi Box</div>
 
       <button class="s-pitch-btn" onclick="openPitchPicker()">
         <span class="s-pitch-num" id="s-pitch-disp">C#</span>
@@ -213,7 +215,6 @@ body {
       <button class="play-btn-huge play-green" id="s-play-btn" onclick="toggleShruti()">▶</button>
       <div style="width:100%; margin-top:auto;">
         <div class="s-pitch-lbl" style="margin-bottom:8px;">Quick Sruthi</div>
-        <!-- NEW: SA PA MA instead of C C# D D# E -->
         <div class="s-favs">
           <button class="s-fav-btn" id="swara-sa" onclick="toggleSwara('SA')">SA</button>
           <button class="s-fav-btn" id="swara-pa" onclick="toggleSwara('PA')">PA</button>
@@ -225,7 +226,7 @@ body {
     <div class="p1-card">
       <div class="card-title"><span class="card-icon" style="color:var(--blue-main);">◮</span> Metronome</div>
       <div class="m-bpm-wrap" id="m-drag-area">
-        <input type="number" class="m-bpm-input" id="m-bpm-input" value="140" onchange="setBpm(this.value)">
+        <input type="number" class="m-bpm-input" id="m-bpm-input" value="80" onchange="setBpm(this.value)">
         <span class="m-bpm-lbl">BPM</span>
       </div>
       <div class="m-ts-row">
@@ -247,11 +248,10 @@ body {
 </div>
 
 <footer class="app-footer">
-  <span>Copyright Kalaa Srushti Academy © 2026</span>
-  <span>By Ramadass</span>
+  <p class="footer-text" >Copyright Kalaa Srushti Academy &copy; 2025,2026</p>
+  <p class="footer-text" >Developed and maintained By Ramadass</p>
 </footer>
 
-<!-- Pitch Picker -->
 <div class="modal-overlay" id="modal-pitch">
   <div class="modal-content">
     <div class="modal-close" onclick="closeModal('modal-pitch')">×</div>
@@ -260,7 +260,6 @@ body {
   </div>
 </div>
 
-<!-- Tala Picker -->
 <div class="modal-overlay" id="modal-tala">
   <div class="modal-content">
     <div class="modal-close" onclick="closeModal('modal-tala')">×</div>
@@ -269,7 +268,6 @@ body {
   </div>
 </div>
 
-<!-- Custom Tala Builder -->
 <div class="modal-overlay" id="modal-custom-tala">
   <div class="modal-content">
     <div class="modal-close" onclick="closeModal('modal-custom-tala')">×</div>
@@ -282,7 +280,6 @@ body {
   </div>
 </div>
 
-<!-- Sound Picker -->
 <div class="modal-overlay" id="modal-sound">
   <div class="modal-content">
     <div class="modal-close" onclick="closeModal('modal-sound')">×</div>
@@ -342,7 +339,7 @@ function setSVol(v) {
   sVol=parseFloat(v);
   sNodes.forEach(n=>n.mg.gain.setTargetAtTime(sVol,getCtx().currentTime,0.1));
   ['SA','PA','MA'].forEach(sw => {
-    swaraNodes[sw].forEach(n=>n.mg.gain.setTargetAtTime(sVol*0.8,getCtx().currentTime,0.1));
+    swaraNodes[sw].forEach(n=>n.mg.gain.setTargetAtTime(sVol*0.5,getCtx().currentTime,0.1));
   });
 }
 
@@ -388,9 +385,12 @@ function startShruti() {
   let f=ROOT_FREQS[sRoot]; if(sOct===5) f*=2; if(sOct===3) f/=2;
   [f, f/2].forEach(freq=>{
     let mg=ctx.createGain(); mg.gain.value=0; mg.gain.setTargetAtTime(sVol,ctx.currentTime,0.3); mg.connect(ctx.destination);
-    let o1=ctx.createOscillator(); o1.type='sawtooth'; o1.frequency.value=freq;
-    let o2=ctx.createOscillator(); o2.type='sawtooth'; o2.frequency.value=freq+0.5;
-    let flt=ctx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=freq*3;
+
+    let o1=ctx.createOscillator(); o1.type='triangle'; o1.frequency.value=freq;
+    let o2=ctx.createOscillator(); o2.type='triangle'; o2.frequency.value=freq+0.2;
+
+    let flt=ctx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=freq*1.8;
+
     o1.connect(flt); o2.connect(flt); flt.connect(mg);
     o1.start(); o2.start();
     sNodes.push({mg,oscs:[o1,o2]});
@@ -419,11 +419,14 @@ function playSwara(sw) {
   if(sw==='SA') freq = baseFreq * 2;
   if(sw==='PA') freq = baseFreq * 1.4983;
   if(sw==='MA') freq = baseFreq * 1.3333;
-  
-  let mg=ctx.createGain(); mg.gain.value=0; mg.gain.setTargetAtTime(sVol*0.8,ctx.currentTime,0.3); mg.connect(ctx.destination);
-  let o1=ctx.createOscillator(); o1.type='sawtooth'; o1.frequency.value=freq;
-  let o2=ctx.createOscillator(); o2.type='sawtooth'; o2.frequency.value=freq+0.3;
-  let flt=ctx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=freq*3;
+
+  let mg=ctx.createGain(); mg.gain.value=0; mg.gain.setTargetAtTime(sVol*0.5,ctx.currentTime,0.3); mg.connect(ctx.destination);
+
+  let o1=ctx.createOscillator(); o1.type='sine'; o1.frequency.value=freq;
+  let o2=ctx.createOscillator(); o2.type='sine'; o2.frequency.value=freq+0.1;
+
+  let flt=ctx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=freq*1.2;
+
   o1.connect(flt); o2.connect(flt); flt.connect(mg);
   o1.start(); o2.start();
   swaraNodes[sw].push({mg,oscs:[o1,o2]});
@@ -438,11 +441,11 @@ function stopSwara(sw) {
   swaraNodes[sw]=[];
 }
 
-let mRunning=false, mBpm=140, mSound='Wood Block', mTalaName='Adi Talam';
+let mRunning=false, mBpm=80, mSound='Wood Block', mTalaName='Adi Talam';
 let mTalaArr=DEFAULT_TALAS['Adi Talam'];
 let mNextTime=0, mBeat=0;
 
-function setBpm(v) { mBpm=Math.max(20,Math.min(300,parseInt(v)||140)); $('m-bpm-input').value=mBpm; }
+function setBpm(v) { mBpm=Math.max(20,Math.min(300,parseInt(v)||80)); $('m-bpm-input').value=mBpm; }
 function adjBpm(d) { setBpm(mBpm+d); }
 
 function getAllTalas() { return {...DEFAULT_TALAS,...ls.get('tm_custom_talas',{})}; }
@@ -501,18 +504,30 @@ function playClick(t,acc) {
   let ctx=getCtx();
   let g=ctx.createGain(); g.connect(ctx.destination);
   g.gain.setValueAtTime(acc?1.0:0.5,t);
-  g.gain.exponentialRampToValueAtTime(0.001,t+0.1);
+
   if(mSound==='Click'||mSound==='Wood Block'){
-    let o=ctx.createOscillator(); o.type='sine'; o.frequency.value=acc?1000:600;
-    o.connect(g); o.start(t); o.stop(t+0.1);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.04);
+    let o=ctx.createOscillator(); o.type='sine'; o.frequency.value=acc?750:480;
+    o.connect(g); o.start(t); o.stop(t+0.04);
   } else if(mSound==='Bell'){
-    let o=ctx.createOscillator(); o.type='sine'; o.frequency.value=acc?2000:1500;
-    o.connect(g); o.start(t); o.stop(t+0.5);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+
+    let baseFreq = ROOT_FREQS[sRoot];
+    if(sOct===5) baseFreq*=2;
+    if(sOct===3) baseFreq/=2;
+
+    let saFreq = baseFreq * 2;
+
+    let o=ctx.createOscillator(); o.type='sine';
+    o.frequency.value = acc ? saFreq * 2 : saFreq;
+
+    o.connect(g); o.start(t); o.stop(t+0.4);
   } else {
-    let bs=ctx.sampleRate*0.1, bf=ctx.createBuffer(1,bs,ctx.sampleRate), dt=bf.getChannelData(0);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.04);
+    let bs=ctx.sampleRate*0.04, bf=ctx.createBuffer(1,bs,ctx.sampleRate), dt=bf.getChannelData(0);
     for(let i=0;i<bs;i++) dt[i]=Math.random()*2-1;
     let ns=ctx.createBufferSource(); ns.buffer=bf;
-    let fl=ctx.createBiquadFilter(); fl.type='bandpass'; fl.frequency.value=1200;
+    let fl=ctx.createBiquadFilter(); fl.type='bandpass'; fl.frequency.value=1000;
     ns.connect(fl); fl.connect(g); ns.start(t);
   }
 }
@@ -555,8 +570,6 @@ function saveCustomTala() {
   pickTala(nm);
   closeModal('modal-custom-tala');
 }
-
-
 </script>
 </body>
 </html>
