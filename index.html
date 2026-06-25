@@ -322,6 +322,19 @@ const ls = {
 };
 const $ = id => document.getElementById(id);
 
+let keepaliveNode = null;
+function keepCtxAlive() {
+  let ctx = getCtx();
+  if(keepaliveNode) return;
+  let buf = ctx.createBuffer(1, 1, ctx.sampleRate);
+  let src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.loop = true;
+  src.connect(ctx.destination);
+  src.start();
+  keepaliveNode = src;
+  ctx.onstatechange = () => { if(ctx.state === 'suspended') ctx.resume(); };
+}
 let appCtx;
 function getCtx() {
   if(!appCtx) appCtx = new (window.AudioContext||window.webkitAudioContext)();
@@ -393,6 +406,7 @@ function toggleShruti() {
 }
 
 function startShruti() {
+  keepCtxAlive();
   let ctx=getCtx();
   let f=ROOT_FREQS[sRoot]; if(sOct===5) f*=2; if(sOct===3) f/=2;
   [f, f/2].forEach(freq=>{
