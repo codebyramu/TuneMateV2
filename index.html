@@ -13,7 +13,7 @@
 <style>
 :root {
   --bg-app: #f4f7f9;
-  --bg-card: #ffffff;
+  --bg-card: rgba(230, 230, 190, 0.5);*/
   --text-main: #1a1e23;
   --text-muted: #6b7280;
   --green-main: #7dd3b3;
@@ -29,13 +29,17 @@ html, body {
   height: 100%;
   overflow: auto;
 }
+/*background-color: var(--bg-app);*/
 body {
-  font-family: 'Trebuchet MS', sans-serif; 
+  font-family: 'Trebuchet MS', sans-serif;
   color: var(--text-main); width: 100%; min-width: 480px;
   min-height: 100vh; height: 100%; align-items: center; justify-content: space-evenly;
 
-  	/*background-image: url('http://googleusercontent.com/image_generation_content/0.png');*/
-  	background-image: bg.png;
+  	background-image: url("bg.png");
+
+  	backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
     background-size: cover;             /* Scales the image to cover the entire screen */
     background-position: center center; /* Centers the musical instruments on the page */
     background-repeat: no-repeat;       /* Prevents the image from tiling grid-style */
@@ -62,10 +66,16 @@ body {
 .academy-name {
   font-size: 40px;
   font-weight: 600;
-  color: #0088ff;
+  color: #0055ff;
   letter-spacing: 0.5px;
   line-height: 1.2;
   width: 100%;
+  text-shadow:
+      0 0 1px rgba(255, 255, 255, 0.9), /* Define edge with white shadow */
+      0 0 10px rgba(0, 136, 255, 0.9),  /* Tight, strong blue inner glow */
+      0 0 20px rgba(0, 136, 255, 0.8), /* Medium blue glow layer */
+      0 0 40px rgba(0, 136, 255, 0.6), /* Large blue diffuse spread */
+    0 0 80px rgba(0, 136, 255, 0.4); /* Extra-large blue soft spread */
 }
 .app-title { font-family: 'Trebuchet MS', sans-serif; font-size: 24px; font-weight: 600; color: #111; letter-spacing: -0.5px; }
 
@@ -83,13 +93,14 @@ body {
 @media(max-width: 759px) {
   .p1-cards { flex-direction: column; width: 92%; overflow-y: auto; padding-bottom: 16px; }
 }
+/* background: var(--bg-card); */
 .p1-card {
   flex: 1;
-  background: var(--bg-card);
+  background: var(--bg-card);;
   border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.03);
-  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 30px rgba(100,0,0,0.03);
+  border: 1px solid #f0d3ad;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,14 +111,14 @@ body {
 .card-title {
   font-size: 16px;
   font-weight: 600;
-  color: #334155;
+  color: #5e3602;
   display: flex;
   align-items: center;
   gap: 8px;
   width: 100%;
   margin-bottom: 16px;
 }
-.card-icon { font-size: 18px; }
+.card-icon { color: #5e3602; font-size: 18px; }
 
 
 .s-pitch-btn {
@@ -119,12 +130,12 @@ body {
   cursor: pointer;
   margin-bottom: 20px;
 }
-.s-pitch-num { font-size: 32px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; }
-.s-pitch-lbl { font-size: 13px; color: #94a3b8; font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+.s-pitch-num { font-size: 32px; font-weight: 500; color: #5e3602; letter-spacing: -2px; line-height: 1; }
+.s-pitch-lbl { font-size: 13px; color: #5e3602; font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
 .s-vol-row { display: flex; align-items: center; gap: 12px; width: 100%; margin-bottom: 24px; max-width: 260px; }
-.s-vol-row span { color: #cbd5e1; font-size: 18px; }
-.vol-slider { flex: 1; -webkit-appearance: none; height: 6px; background: #e2e8f0; border-radius: 3px; outline: none; }
-.vol-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--green-main); box-shadow: 0 0 0 4px rgba(125,211,179,0.2); cursor: pointer; }
+.s-vol-row span { color: #5e3602; font-size: 18px; }
+.vol-slider { flex: 1; -webkit-appearance: none; height: 6px; background: #5e3602; border-radius: 3px; outline: none; }
+.vol-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #5e3602;; box-shadow: 0 0 0 4px rgba(125,211,179,0.2); cursor: pointer; }
 .play-btn-huge { width: 80px; height: 80px; border-radius: 50%; border: none; color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; margin-bottom: 24px; flex-shrink: 0; }
 .play-green { background: var(--green-main); box-shadow: 0 8px 24px rgba(125,211,179,0.4); }
 .play-blue { background: var(--blue-main); box-shadow: 0 8px 24px rgba(93,131,185,0.4); }
@@ -135,10 +146,10 @@ body {
 .s-fav-btn.active { background: var(--green-light); color: var(--green-dark); border-color: var(--green-dark); box-shadow: 0 0 0 1px var(--green-dark); }
 
 .m-bpm-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; cursor: ns-resize; }
-.m-bpm-input { font-size: 32px; font-weight: 500; color: #0f172a; letter-spacing: -2px; line-height: 1; text-align: center; border: none; background: transparent; width: 120px; outline: none; font-family: inherit; padding: 0; margin: 0; }
-.m-bpm-lbl { font-size: 13px; color: #94a3b8; font-weight: 600; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
+.m-bpm-input { font-size: 32px; font-weight: 500; color: #5e3602; letter-spacing: -2px; line-height: 1; text-align: center; border: none; background: transparent; width: 120px; outline: none; font-family: inherit; padding: 0; margin: 0; }
+.m-bpm-lbl { font-size: 13px; color: #5e3602; font-weight: 600; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
 .m-ts-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 20px; }
-.m-circle-btn { width: 44px; height: 44px; border-radius: 50%; background: #f1f5f9; border: none; color: #64748b; font-size: 24px; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; line-height: 0; }
+.m-circle-btn { width: 44px; height: 44px; border-radius: 50%; background: #f1f5f9; border: none; color: #5e3602; font-size: 24px; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; line-height: 0; }
 .m-ts-disp { font-size: 18px; font-weight: 600; color: #0f172a; width: 40px; text-align: center; }
 .m-bottom-btns { display: flex; gap: 12px; width: 100%; }
 .m-pill-btn { flex: 1; background: #f1f5f9; border: none; border-radius: 16px; padding: 14px 0; font-size: 15px; font-weight: 600; color: #475569; cursor: pointer; font-family: inherit; transition: 0.2s; }
@@ -209,9 +220,9 @@ body {
         <span class="s-pitch-lbl">Pitch</span>
       </button>
       <div class="s-vol-row">
-        <span>🔈</span>
+        <span>🔈&#xFE0E;</span>
         <input type="range" class="vol-slider" id="s-vol-slider" min="0" max="1" step="0.01" value="0.5" oninput="setSVol(this.value)">
-        <span>🔊</span>
+        <span>🔊&#xFE0E;</span>
       </div>
       <button class="play-btn-huge play-green" id="s-play-btn" onclick="toggleShruti()">▶</button>
       <div style="width:100%; margin-top:auto;">
@@ -232,7 +243,7 @@ body {
       </div>
       <div class="m-ts-row">
         <button class="m-circle-btn" onclick="adjBpm(-1)">−</button>
-        <div class="m-ts-disp" id="m-ts-disp">4/4</div>
+        <div class="m-ts-disp" id="m-ts-disp">&nbsp;</div>
         <button class="m-circle-btn" onclick="adjBpm(1)">+</button>
       </div>
       <button class="play-btn-huge play-blue" id="m-play-btn" onclick="toggleMetro()">▶</button>
